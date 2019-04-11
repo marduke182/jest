@@ -37,10 +37,12 @@ namespace TestRunner {
 class TestRunner {
   private _globalConfig: Config.GlobalConfig;
   private _context: TestRunnerContext;
+  private _globalContext: any;
 
-  constructor(globalConfig: Config.GlobalConfig, context?: TestRunnerContext) {
+  constructor(globalConfig: Config.GlobalConfig, context?: TestRunnerContext, globalContext?: any) {
     this._globalConfig = globalConfig;
     this._context = context || {};
+    this._globalContext = globalContext;
   }
 
   async runTests(
@@ -87,6 +89,7 @@ class TestRunner {
                 test.context.config,
                 test.context.resolver,
                 this._context,
+                this._globalContext,
               );
             })
             .then(result => onResult(test, result))
@@ -142,6 +145,7 @@ class TestRunner {
 
         return worker.worker({
           config: test.context.config,
+          globalContext: this._globalContext,
           context: {
             ...this._context,
             changedFiles:

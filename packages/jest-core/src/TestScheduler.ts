@@ -49,16 +49,19 @@ export default class TestScheduler {
   private _globalConfig: Config.GlobalConfig;
   private _options: TestSchedulerOptions;
   private _context: TestSchedulerContext;
+  private _globalContext: any;
 
   constructor(
     globalConfig: Config.GlobalConfig,
     options: TestSchedulerOptions,
     context: TestSchedulerContext,
+    globalContext: any,
   ) {
     this._dispatcher = new ReporterDispatcher();
     this._globalConfig = globalConfig;
     this._options = options;
     this._context = context;
+    this._globalContext = globalContext;
     this._setupReporters();
   }
 
@@ -168,9 +171,13 @@ export default class TestScheduler {
     contexts.forEach(({config}) => {
       if (!testRunners[config.runner]) {
         const Runner: typeof TestRunner = require(config.runner);
-        testRunners[config.runner] = new Runner(this._globalConfig, {
-          changedFiles: this._context && this._context.changedFiles,
-        });
+        testRunners[config.runner] = new Runner(
+          this._globalConfig,
+          {
+            changedFiles: this._context && this._context.changedFiles,
+          },
+          this._globalContext,
+        );
       }
     });
 

@@ -17,6 +17,7 @@ type JestMockSpyOn = typeof jestMock.spyOn;
 export type EnvironmentContext = {
   console?: Console;
   testPath?: Config.Path;
+  globalContext?: any;
 };
 
 // TODO: type this better: https://nodejs.org/api/modules.html#modules_the_module_wrapper

@@ -26,6 +26,7 @@ type WorkerData = {
   globalConfig: Config.GlobalConfig;
   path: Config.Path;
   context?: TestRunnerSerializedContext;
+  globalContext?: any;
 };
 
 // Make sure uncaught errors are logged before we exit.
@@ -79,6 +80,7 @@ export async function worker({
   globalConfig,
   path,
   context,
+  globalContext,
 }: WorkerData): Promise<TestResult> {
   try {
     return await runTest(
@@ -90,6 +92,7 @@ export async function worker({
         ...context,
         changedFiles: context.changedFiles && new Set(context.changedFiles),
       },
+      globalContext,
     );
   } catch (error) {
     throw formatError(error);

@@ -236,9 +236,13 @@ export default (async function runJest({
   if (globalConfig.detectOpenHandles) {
     collectHandles = collectNodeHandles();
   }
-
+  let globalContext;
   if (hasTests) {
-    await runGlobalHook({allTests, globalConfig, moduleName: 'globalSetup'});
+    globalContext = await runGlobalHook({
+      allTests,
+      globalConfig,
+      moduleName: 'globalSetup',
+    });
   }
 
   if (changedFilesPromise) {
@@ -249,6 +253,7 @@ export default (async function runJest({
     globalConfig,
     {startRun},
     testSchedulerContext,
+    globalContext,
   ).scheduleTests(allTests, testWatcher);
 
   sequencer.cacheResults(allTests, results);
